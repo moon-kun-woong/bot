@@ -30,8 +30,6 @@ repositories {
 dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("dev.kord:kord-core:0.12.0")
-	implementation("dev.kord:kord-rest:0.12.0")
-	implementation("dev.kord:kord-gateway:0.12.0")
 	implementation("io.ktor:ktor-client-websockets:2.3.7")
 	implementation("io.ktor:ktor-client-json:2.3.7")
 	implementation("io.ktor:ktor-client-serialization:2.3.7")
