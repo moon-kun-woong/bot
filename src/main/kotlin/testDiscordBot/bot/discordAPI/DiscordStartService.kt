@@ -5,6 +5,7 @@ import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.on
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
+import jakarta.annotation.Priority
 import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -47,9 +48,9 @@ class DiscordStartService {
                         val content = matches.groupValues[2].trim()
 
                         addTask(userId, serverName, channelName, content, priority)
+                        message.channel.createMessage("Task 가 추가 되었습니다.")
                     } else {
-                        // 처리할 수 없는 형식의 명령어일 경우에 대한 처리
-                        message.channel.createMessage("잘못된 형식의 명령어입니다.")
+                        message.channel.createMessage("잘못된 형식.")
                     }
                 }
                 message.content == "!LIST-TASK" -> {
@@ -58,6 +59,15 @@ class DiscordStartService {
                     val taskList = tasks.joinToString(", \n") { it.content }
                     message.channel.createMessage("$userId -> $taskList")
                 }
+
+                message.content == "!NEXT-TASK" -> {
+                    val userId = message.author!!.username
+                    val tasks = botRepository.findAllByUserId(userId = userId)
+                    val bestPriority = tasks.maxByOrNull { it.priority }!!
+                    message.channel.createMessage("$userId 의 가장 중요한 사항: ${bestPriority.content} \n --p ${bestPriority.priority}")
+
+                }
+
             }
         }
 
@@ -84,4 +94,3 @@ class DiscordStartService {
     }
 
 }
-
