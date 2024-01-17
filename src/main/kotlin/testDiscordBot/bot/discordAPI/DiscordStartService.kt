@@ -14,6 +14,7 @@ import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 import testDiscordBot.bot.discordEntity.Task
 import testDiscordBot.bot.discordRepository.BotRepository
+import kotlin.math.max
 
 @Service
 class DiscordStartService {
@@ -63,9 +64,21 @@ class DiscordStartService {
                 message.content == "!NEXT-TASK" -> {
                     val userId = message.author!!.username
                     val tasks = botRepository.findAllByUserId(userId = userId)
-                    val bestPriority = tasks.maxByOrNull { it.priority }!!
-                    message.channel.createMessage("$userId 의 가장 중요한 사항: ${bestPriority.content} \n --p ${bestPriority.priority}")
 
+                    val highestPriorities = tasks.maxByOrNull { it.priority }
+
+                    val bestImportentTask = if (highestPriorities != null) {
+                        tasks.filter { it.priority == highestPriorities.priority }
+                            .maxByOrNull { it.createdAt }
+                    } else {
+                        null
+                    }
+
+                    if (bestImportentTask != null) {
+                        message.channel.createMessage("현재 $userId 의 가장 중요한 사항: ${bestImportentTask.content} \n --p ${bestImportentTask.priority}")
+                    } else {
+                        message.channel.createMessage("아직 추가된 중요사항이 없습니다.")
+                    }
                 }
 
             }
