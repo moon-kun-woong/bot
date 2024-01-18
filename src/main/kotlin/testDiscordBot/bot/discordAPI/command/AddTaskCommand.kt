@@ -1,37 +1,27 @@
 package testDiscordBot.bot.discordAPI.command
 
-import dev.kord.core.event.message.MessageCreateEvent
-import testDiscordBot.bot.discordAPI.Command
 import testDiscordBot.bot.discordEntity.Task
 import testDiscordBot.bot.discordRepository.TaskRepository
 
-class AddTaskCommand(override val taskRepository: TaskRepository) : Command {
-    override suspend fun execute(event: MessageCreateEvent) {
-        val message = event.message
-        if (message.author?.isBot == true) return
-
-        val userId = message.author!!.username
-        val channelName = message.getChannel().data.name.value.toString()
-        val serverName = message.getGuild().name
+class AddTaskCommand(override val taskRepository: TaskRepository) : MessageCreateCommand() {
+    override suspend fun execute(parameter: MessageCreateParameter): CommandResult {
+        val userId = parameter.username
+        val channelName = parameter.channelName
+        val serverName = parameter.serverName
 
         val regex = Regex("!ADD-TASK(?:\\s+--p\\s+(\\d+))?\\s+(.+)")
-        val matches = regex.find(message.content)
+        val matches = regex.find(parameter.content) ?: return CommandResult.reply("잘못된 형식")
 
-        if (matches != null) {
-            val priority = matches.groupValues[1].toIntOrNull() ?: 0
-            val content = matches.groupValues[2].trim()
+        val (_, priority, content) = matches.groupValues
+        val task = Task(
+            userId = userId,
+            serverName = serverName,
+            channelName = channelName,
+            content = content.trim(),
+            priority = priority.toIntOrNull() ?: 0
+        )
+        taskRepository.save(task)
 
-            val task = Task(
-                userId = userId,
-                serverName = serverName,
-                channelName = channelName,
-                content = content,
-                priority = priority
-            )
-            taskRepository.save(task)
-            message.channel.createMessage("Task 가 추가 되었습니다.")
-        } else {
-            message.channel.createMessage("잘못된 형식.")
-        }
+        return CommandResult.reply("Task 가 추가되었습니다.")
     }
 }

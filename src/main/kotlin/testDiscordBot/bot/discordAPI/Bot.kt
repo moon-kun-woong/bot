@@ -11,6 +11,8 @@ import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 import testDiscordBot.bot.discordAPI.command.CommandResolver
+import testDiscordBot.bot.discordAPI.command.CommandResultType
+import testDiscordBot.bot.discordAPI.command.MessageCreateCommand
 
 @Service
 class Bot(
@@ -21,7 +23,11 @@ class Bot(
 
     private suspend fun handleMessageCreateEvent(event: MessageCreateEvent) {
         val command = commandResolver.resolve(event.message)
-        command.execute(event)
+        val parameter = MessageCreateCommand.buildParameterFrom(event)
+
+        command.execute(parameter).let {
+            if (it.type == CommandResultType.REPLY) event.message.channel.createMessage(it.message)
+        }
     }
 
     @EventListener(ApplicationReadyEvent::class)
