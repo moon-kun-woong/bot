@@ -1,8 +1,8 @@
 package testDiscordBot.bot.discordAPI
 
-import dev.kord.core.event.message.MessageCreateEvent
+import dev.kord.core.entity.Message
 
 class UnsupportedCommandException(
-    event: MessageCreateEvent
-) : Exception("Unsupported command invoked, message: ${event.message}")
+    message: Message
+) : Exception("Unsupported command invoked, message: $message")
 
