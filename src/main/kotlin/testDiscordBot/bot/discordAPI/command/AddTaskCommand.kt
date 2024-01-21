@@ -1,9 +1,19 @@
 package testDiscordBot.bot.discordAPI.command
 
+import org.springframework.context.support.GenericApplicationContext
+import org.springframework.context.support.registerBean
 import testDiscordBot.bot.discordEntity.Task
 import testDiscordBot.bot.discordRepository.TaskRepository
 
+@CommandAnnotation(prefix = "!ADD-TASK")
 class AddTaskCommand(override val taskRepository: TaskRepository) : MessageCreateCommand() {
+
+
+    val context = GenericApplicationContext().apply {
+        registerBean<CommandAnnotation>(this.displayName)
+
+    }
+
     override suspend fun execute(parameter: MessageCreateParameter): CommandResult {
         val userId = parameter.username
         val channelName = parameter.channelName

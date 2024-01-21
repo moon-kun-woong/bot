@@ -2,7 +2,9 @@ package testDiscordBot.bot.discordAPI.command
 
 import testDiscordBot.bot.discordRepository.TaskRepository
 
+@CommandAnnotation(prefix = "!NEXT-TASK")
 class NextTaskCommand(override val taskRepository: TaskRepository) : MessageCreateCommand() {
+
     override suspend fun execute(parameter: MessageCreateParameter): CommandResult {
         val userId = parameter.username
 
