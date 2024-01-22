@@ -1,8 +1,10 @@
 package testDiscordBot.bot.discordAPI.command
 
+import org.springframework.stereotype.Component
 import testDiscordBot.bot.discordRepository.TaskRepository
 
 @CommandAnnotation(prefix = "!NEXT-TASK")
+@Component
 class NextTaskCommand(override val taskRepository: TaskRepository) : MessageCreateCommand() {
 
     override suspend fun execute(parameter: MessageCreateParameter): CommandResult {
