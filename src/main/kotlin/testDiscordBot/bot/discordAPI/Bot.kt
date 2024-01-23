@@ -18,7 +18,7 @@ import testDiscordBot.bot.discordAPI.command.MessageCreateCommand
 class Bot(
     @Value("\${discord.bot.token}")
     private val discordToken: String,
-    private val commandResolver: CommandResolver,
+    private val commandResolver: CommandResolver
 ) {
 
     private suspend fun handleMessageCreateEvent(event: MessageCreateEvent) {
