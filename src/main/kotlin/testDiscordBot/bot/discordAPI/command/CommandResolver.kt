@@ -8,6 +8,7 @@ import testDiscordBot.bot.discordAPI.UnsupportedCommandException
 @Component
 class CommandResolver(
     private val ac: ApplicationContext,
+    private val ai: OpenAiAPI
 ) {
     fun findBeanByCommandAnnotation(): Map<String?, Command> {
 
@@ -16,8 +17,18 @@ class CommandResolver(
             .associateBy { it::class.java.getAnnotation(CommandAnnotation::class.java)?.prefix }
     }
 
-    fun resolve(message: Message): Command {
-        val writeCommand = message.content.split("\\s+".toRegex())[0]
+    suspend fun aiTextFilter(message: Message): String? {
+        val aiText = ai.processNlpForTask(message).toString()
+        val regex = Regex("TextContent\\(content=(.*?)\\)")
+        val aiResponse = regex.find(aiText)?.groupValues?.get(1)
+
+        println("aiResponse ---->>$aiResponse")
+
+        return aiResponse
+    }
+
+    suspend fun resolve(message: Message): Command {
+        val writeCommand = aiTextFilter(message).toString().split("\\s+".toRegex())[0]
         val commandBeans = findBeanByCommandAnnotation()
 
         println("writeCommand ---->>$writeCommand")

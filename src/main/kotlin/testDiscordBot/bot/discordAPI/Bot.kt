@@ -13,19 +13,22 @@ import org.springframework.stereotype.Service
 import testDiscordBot.bot.discordAPI.command.CommandResolver
 import testDiscordBot.bot.discordAPI.command.CommandResultType
 import testDiscordBot.bot.discordAPI.command.MessageCreateCommand
+import testDiscordBot.bot.discordAPI.command.OpenAiAPI
 
 @Service
 class Bot(
     @Value("\${discord.bot.token}")
     private val discordToken: String,
-    private val commandResolver: CommandResolver
+    private val commandResolver: CommandResolver,
 ) {
 
     private suspend fun handleMessageCreateEvent(event: MessageCreateEvent) {
+        val aiResponse = commandResolver.aiTextFilter(event.message)
         val command = commandResolver.resolve(event.message)
         val parameter = MessageCreateCommand.buildParameterFrom(event)
 
         command.execute(parameter).let {
+            event.message.channel.createMessage(aiResponse.toString())
             if (it.type == CommandResultType.REPLY) event.message.channel.createMessage(it.message)
         }
     }
