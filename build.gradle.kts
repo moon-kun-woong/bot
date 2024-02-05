@@ -29,10 +29,25 @@ repositories {
 
 dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+	// 디스코드
 	implementation("dev.kord:kord-core:0.12.0")
 	implementation("io.ktor:ktor-client-websockets:2.3.7")
 	implementation("io.ktor:ktor-client-json:2.3.7")
 	implementation("io.ktor:ktor-client-serialization:2.3.7")
+
+	// OpenAi API
+	implementation("io.ktor:ktor-client-apache5:2.3.7")
+	implementation("io.ktor:ktor-client-core:2.3.7")
+	implementation("io.ktor:ktor-serialization-kotlinx-cbor:2.3.7")
+	implementation("com.aallam.ktoken:ktoken:0.3.0")
+	implementation("com.aallam.openai:openai-client:3.6.3")
+	implementation("org.springframework.boot:spring-boot-starter-web")
+
+	//json
+	implementation("com.googlecode.json-simple:json-simple:1.1")
+
+
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 

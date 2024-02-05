@@ -1,28 +1,38 @@
 package testDiscordBot.bot.discordAPI.command
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.json.simple.JSONArray
+import org.json.simple.JSONObject
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import testDiscordBot.bot.discordEntity.Task
 import testDiscordBot.bot.discordRepository.TaskRepository
 
 @CommandAnnotation(prefix = "!ADD-TASK")
-class AddTaskCommand(override val taskRepository: TaskRepository) : MessageCreateCommand() {
+class AddTaskCommand(override val taskRepository: TaskRepository,
+                    @Autowired private val openAiAPI: OpenAiAPI
+    ) : MessageCreateCommand() {
     override suspend fun execute(parameter: MessageCreateParameter): CommandResult {
 
-        val userId = parameter.username
-        val channelName = parameter.channelName
-        val serverName = parameter.serverName
+        val chatMessage = openAiAPI.processNlpForTask(parameter)
 
-        val regex = Regex("!ADD-TASK(?:\\s+--p\\s+(\\d+))?\\s+(.+)")
-        val matches = regex.find(parameter.content) ?: return CommandResult.reply("잘못된 형식")
+        val mapper = ObjectMapper().registerModules()
+        val jsonNode : JsonNode  = mapper.readTree(chatMessage)
 
-        val (_, priority, content) = matches.groupValues
+        val userId = jsonNode["userId"].asText()
+        val channelName = jsonNode["channelName"].asText()
+        val serverName = jsonNode["serverName"].asText()
+        val content = jsonNode["content"].asText()
+        val priority = jsonNode["priority"].asInt()
+
         val task = Task(
             userId = userId,
             serverName = serverName,
             channelName = channelName,
-            content = content.trim(),
-            priority = priority.toIntOrNull() ?: 0
+            content = content,
+            priority = priority
         )
         taskRepository.save(task)
 
