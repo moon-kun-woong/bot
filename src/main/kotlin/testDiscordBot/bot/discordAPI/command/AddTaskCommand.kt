@@ -21,6 +21,7 @@ class AddTaskCommand(override val taskRepository: TaskRepository,
         val mapper = ObjectMapper().registerModules()
         val jsonNode : JsonNode  = mapper.readTree(chatMessage)
 
+
         val userId = jsonNode["userId"].asText()
         val channelName = jsonNode["channelName"].asText()
         val serverName = jsonNode["serverName"].asText()
