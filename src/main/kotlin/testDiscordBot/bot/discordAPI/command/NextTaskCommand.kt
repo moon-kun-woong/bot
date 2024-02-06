@@ -1,10 +1,12 @@
 package testDiscordBot.bot.discordAPI.command
 
-import org.springframework.context.ApplicationContext
+import org.springframework.beans.factory.annotation.Autowired
 import testDiscordBot.bot.discordRepository.TaskRepository
 
 @CommandAnnotation(prefix = "!NEXT-TASK")
-class NextTaskCommand(override val taskRepository: TaskRepository) : MessageCreateCommand() {
+class NextTaskCommand(override val taskRepository: TaskRepository,
+                        @Autowired private val openAiAPI: OpenAiAPI
+    ) : MessageCreateCommand() {
     override suspend fun execute(parameter: MessageCreateParameter): CommandResult {
 
         val userId = parameter.username
@@ -17,6 +19,11 @@ class NextTaskCommand(override val taskRepository: TaskRepository) : MessageCrea
             .filter { it.priority == highestPriorities.priority }
             .maxBy { it.createdAt }
 
-        return CommandResult.reply("현재 $userId 의 가장 중요한 사항: ${task.content} \n --p ${task.priority}")
+        println("가장 높은 Task"+task)
+
+        val openAiProcessingData = openAiAPI.processFindNextTask(task)
+
+
+        return CommandResult.reply(openAiProcessingData)
     }
 }
