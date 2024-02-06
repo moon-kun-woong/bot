@@ -10,9 +10,8 @@ class ListTaskCommand(override val taskRepository: TaskRepository,
     override suspend fun execute(parameter: MessageCreateParameter): CommandResult {
 
         val userId = parameter.username
-        val tasks = taskRepository.findAllByUserId(userId = userId).toString()
-        val openAiProcessingData = openAiAPI.processFindTaskList(tasks)
-
-        return CommandResult.reply(openAiProcessingData)
+        val tasks = taskRepository.findAllByUserId(userId = userId)
+        val taskList = tasks.joinToString(", \n") { it.content }
+        return CommandResult.reply("$userId -> $taskList")
     }
 }
