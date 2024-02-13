@@ -19,8 +19,6 @@ class NextTaskCommand(override val taskRepository: TaskRepository,
             .filter { it.priority == highestPriorities.priority }
             .maxBy { it.createdAt }
 
-        println("가장 높은 Task"+task)
-
         val openAiProcessingData = openAiAPI.processFindNextTask(task)
 
 
