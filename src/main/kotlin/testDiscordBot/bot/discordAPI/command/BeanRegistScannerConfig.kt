@@ -4,5 +4,5 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 
 @Configuration
-@Import(ComponentMy::class)
-class MyBeanScannerConfig
+@Import(BeanRegistScanner::class)
+class BeanRegistScannerConfig

@@ -3,9 +3,9 @@ package testDiscordBot.bot.discordAPI.command
 import org.springframework.beans.factory.annotation.Autowired
 import testDiscordBot.bot.discordRepository.TaskRepository
 
-@CommandAnnotation(prefix = "!NEXT-TASK")
+@BeanRegister(prefix = "!NEXT-TASK")
 class NextTaskCommand(override val taskRepository: TaskRepository,
-                        @Autowired private val openAiAPI: OpenAiAPI
+                        @Autowired private val aiPromptDevice: AiPromptDevice
     ) : MessageCreateCommand() {
     override suspend fun execute(parameter: MessageCreateParameter): CommandResult {
 
@@ -19,7 +19,7 @@ class NextTaskCommand(override val taskRepository: TaskRepository,
             .filter { it.priority == highestPriorities.priority }
             .maxBy { it.createdAt }
 
-        val openAiProcessingData = openAiAPI.processFindNextTask(task)
+        val openAiProcessingData = aiPromptDevice.processFindNextTask(task)
 
 
         return CommandResult.reply(openAiProcessingData)

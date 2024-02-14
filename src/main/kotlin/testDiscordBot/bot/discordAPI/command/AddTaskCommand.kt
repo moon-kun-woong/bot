@@ -2,22 +2,17 @@ package testDiscordBot.bot.discordAPI.command
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.json.simple.JSONArray
-import org.json.simple.JSONObject
-import org.json.simple.parser.JSONParser
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.ApplicationContext
-import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import testDiscordBot.bot.discordEntity.Task
 import testDiscordBot.bot.discordRepository.TaskRepository
 
-@CommandAnnotation(prefix = "!ADD-TASK")
+@BeanRegister(prefix = "!ADD-TASK")
 class AddTaskCommand(override val taskRepository: TaskRepository,
-                    @Autowired private val openAiAPI: OpenAiAPI
+                    @Autowired private val aiPromptDevice: AiPromptDevice
     ) : MessageCreateCommand() {
     override suspend fun execute(parameter: MessageCreateParameter): CommandResult {
 
-        val chatMessage = openAiAPI.processNlpForTask(parameter)
+        val chatMessage = aiPromptDevice.processNlpForTask(parameter)
         val jsonGroupData = "[" + chatMessage + "]"
 
         val mapper = ObjectMapper().registerModules()

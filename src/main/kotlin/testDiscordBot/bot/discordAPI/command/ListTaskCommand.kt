@@ -1,9 +1,8 @@
 package testDiscordBot.bot.discordAPI.command
 
-import org.springframework.beans.factory.annotation.Autowired
 import testDiscordBot.bot.discordRepository.TaskRepository
 
-@CommandAnnotation(prefix = "!LIST-TASK")
+@BeanRegister(prefix = "!LIST-TASK")
 class ListTaskCommand(override val taskRepository: TaskRepository) : MessageCreateCommand() {
     override suspend fun execute(parameter: MessageCreateParameter): CommandResult {
 
