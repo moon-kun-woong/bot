@@ -1,9 +1,9 @@
-package testDiscordBot.bot.discordAPI.command
+package testDiscordBot.bot.discordapi.command
 
 import dev.kord.core.entity.Message
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Component
-import testDiscordBot.bot.discordAPI.UnsupportedCommandException
+import testDiscordBot.bot.discordapi.UnsupportedCommandException
 
 @Component
 class CommandResolver(

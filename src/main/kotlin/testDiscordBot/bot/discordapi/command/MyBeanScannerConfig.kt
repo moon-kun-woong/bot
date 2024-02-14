@@ -1,4 +1,4 @@
-package testDiscordBot.bot.discordAPI.command
+package testDiscordBot.bot.discordapi.command
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import

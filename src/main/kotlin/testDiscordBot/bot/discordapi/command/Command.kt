@@ -1,6 +1,6 @@
-package testDiscordBot.bot.discordAPI.command
+package testDiscordBot.bot.discordapi.command
 
-import testDiscordBot.bot.discordRepository.TaskRepository
+import testDiscordBot.bot.discordrepository.TaskRepository
 
 interface Command {
     val taskRepository: TaskRepository

@@ -1,15 +1,10 @@
-package testDiscordBot.bot.discordAPI.command
+package testDiscordBot.bot.discordapi.command
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.json.simple.JSONArray
-import org.json.simple.JSONObject
-import org.json.simple.parser.JSONParser
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.ApplicationContext
-import org.springframework.context.annotation.AnnotationConfigApplicationContext
-import testDiscordBot.bot.discordEntity.Task
-import testDiscordBot.bot.discordRepository.TaskRepository
+import testDiscordBot.bot.discordtask.Task
+import testDiscordBot.bot.discordrepository.TaskRepository
 
 @CommandAnnotation(prefix = "!ADD-TASK")
 class AddTaskCommand(override val taskRepository: TaskRepository,

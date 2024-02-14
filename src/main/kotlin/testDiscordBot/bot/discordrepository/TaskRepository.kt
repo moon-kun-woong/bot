@@ -1,8 +1,8 @@
-package testDiscordBot.bot.discordRepository
+package testDiscordBot.bot.discordrepository
 
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
-import testDiscordBot.bot.discordEntity.Task
+import testDiscordBot.bot.discordtask.Task
 
 @Repository
 interface TaskRepository : CrudRepository<Task, Long> {

@@ -1,4 +1,4 @@
-package testDiscordBot.bot.discordAPI.command
+package testDiscordBot.bot.discordapi.command
 
 @Target(AnnotationTarget.CLASS,AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)

@@ -1,7 +1,6 @@
-package testDiscordBot.bot.discordAPI.command
+package testDiscordBot.bot.discordapi.command
 
-import org.springframework.beans.factory.annotation.Autowired
-import testDiscordBot.bot.discordRepository.TaskRepository
+import testDiscordBot.bot.discordrepository.TaskRepository
 
 @CommandAnnotation(prefix = "!LIST-TASK")
 class ListTaskCommand(override val taskRepository: TaskRepository) : MessageCreateCommand() {

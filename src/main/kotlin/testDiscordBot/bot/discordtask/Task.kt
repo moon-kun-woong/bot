@@ -1,4 +1,4 @@
-package testDiscordBot.bot.discordEntity
+package testDiscordBot.bot.discordtask
 
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
