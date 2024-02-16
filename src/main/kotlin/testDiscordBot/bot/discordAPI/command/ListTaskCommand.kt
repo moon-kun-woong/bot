@@ -2,7 +2,7 @@ package testDiscordBot.bot.discordAPI.command
 
 import testDiscordBot.bot.discordRepository.TaskRepository
 
-@BeanRegister(prefix = "!LIST-TASK")
+@TaskCommand(prefix = "!LIST-TASK")
 class ListTaskCommand(override val taskRepository: TaskRepository) : MessageCreateCommand() {
     override suspend fun execute(parameter: MessageCreateParameter): CommandResult {
 

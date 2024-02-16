@@ -2,7 +2,7 @@ package testDiscordBot.bot.discordAPI.command
 
 import testDiscordBot.bot.discordRepository.TaskRepository
 
-@BeanRegister(prefix = "!DELETE-TASK")
+@TaskCommand(prefix = "!DELETE-TASK")
 class DeleteTaskCommand (override val taskRepository: TaskRepository) : MessageCreateCommand() {
 
     override suspend fun execute(parameter: MessageCreateParameter): CommandResult {

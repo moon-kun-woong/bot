@@ -6,13 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import testDiscordBot.bot.discordEntity.Task
 import testDiscordBot.bot.discordRepository.TaskRepository
 
-@BeanRegister(prefix = "!ADD-TASK")
+@TaskCommand(prefix = "!ADD-TASK")
 class AddTaskCommand(override val taskRepository: TaskRepository,
-                    @Autowired private val aiPromptDevice: AiPromptDevice
+                    @Autowired private val aiPromptWriter: AiPromptWriter
     ) : MessageCreateCommand() {
     override suspend fun execute(parameter: MessageCreateParameter): CommandResult {
 
-        val chatMessage = aiPromptDevice.processNlpForTask(parameter)
+        val chatMessage = aiPromptWriter.processNlpForTask(parameter)
         val jsonGroupData = "[" + chatMessage + "]"
 
         val mapper = ObjectMapper().registerModules()

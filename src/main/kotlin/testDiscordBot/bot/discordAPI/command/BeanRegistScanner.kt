@@ -12,7 +12,7 @@ class BeanRegistScanner: ImportBeanDefinitionRegistrar {
         registry: BeanDefinitionRegistry
     ) {
         val scanner = ClassPathBeanDefinitionScanner(registry, false)
-        scanner.addIncludeFilter(AnnotationTypeFilter(BeanRegister::class.java))
+        scanner.addIncludeFilter(AnnotationTypeFilter(TaskCommand::class.java))
         scanner.scan("testDiscordBot.bot")
     }
 }
