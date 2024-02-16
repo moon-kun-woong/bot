@@ -6,7 +6,7 @@ import com.aallam.openai.api.model.ModelId
 import com.aallam.openai.client.OpenAI
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import testDiscordBot.bot.discordtask.Task
+import testDiscordBot.bot.task.Task
 import kotlin.time.Duration.Companion.seconds
 
 @Component
