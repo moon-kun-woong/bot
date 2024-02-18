@@ -1,4 +1,4 @@
-package testDiscordBot.bot.discordAPI
+package testDiscordBot.bot.discordapi
 
 import dev.kord.core.Kord
 import dev.kord.core.event.message.MessageCreateEvent
@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
-import testDiscordBot.bot.discordAPI.command.CommandResolver
-import testDiscordBot.bot.discordAPI.command.CommandResultType
-import testDiscordBot.bot.discordAPI.command.MessageCreateCommand
+import testDiscordBot.bot.discordapi.command.CommandResolver
+import testDiscordBot.bot.discordapi.command.CommandResultType
+import testDiscordBot.bot.discordapi.command.MessageCreateCommand
 
 @Service
 class Bot(
