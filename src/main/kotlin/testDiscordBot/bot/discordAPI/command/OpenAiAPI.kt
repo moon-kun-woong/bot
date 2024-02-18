@@ -23,25 +23,25 @@ class OpenAiAPI (
         timeout = Timeout(socket = 30.seconds)
     )
 
-    fun resolveChatMessageFromResource(): Map<String, Any> {
+    fun resolveChatMessageFromResource(tagger: String = "nlpprompting.yaml"): Map<String, Any> {
         val yaml = Yaml()
-        val inputStream : InputStream? = this.javaClass.classLoader.getResourceAsStream("nlpprompting.yaml")
+        val inputStream : InputStream? = this.javaClass.classLoader.getResourceAsStream(tagger)
         val obj : Map<String,Any> = yaml.load(inputStream)
         return obj
     }
 
     suspend fun processNlpForTask(event : MessageCreateParameter): String {
-        val promptData = resolveChatMessageFromResource()
+        val promptResource = resolveChatMessageFromResource()
         val chatCompletionRequest = ChatCompletionRequest(
             model = ModelId(model),
             messages = listOf(
                 ChatMessage(
                     role = ChatRole.System,
-                    content = promptData["addCommandSystemContent"].toString()
+                    content = promptResource["addCommandSystemContent"].toString()
                 ),
                 ChatMessage(
                     role = ChatRole.Assistant,
-                    content = promptData["addCommandAssistant"].toString()
+                    content = promptResource["addCommandAssistant"].toString()
                 ),
                 ChatMessage(
                     role = ChatRole.User,
@@ -50,25 +50,25 @@ class OpenAiAPI (
             )
         )
         val completion: ChatCompletion = openAI.chatCompletion(chatCompletionRequest)
-        val jsonStringData = completion.choices[0].message.messageContent.toString().trimIndent()
-        val jsonContent = jsonStringData.substringAfter("{").substringBeforeLast("}")
-        val realJsonData = "{$jsonContent}"
+        val jsonString = completion.choices[0].message.messageContent.toString().trimIndent()
+        val jsonContent = jsonString.substringAfter("{").substringBeforeLast("}")
+        val processedJson = "{$jsonContent}"
 
-        return realJsonData
+        return processedJson
     }
 
     suspend fun processFindNextTask(event: Task):String{
-        val promptData = resolveChatMessageFromResource()
+        val promptResource = resolveChatMessageFromResource()
         val chatCompletionRequest = ChatCompletionRequest(
             model = ModelId(model),
             messages =  listOf(
                 ChatMessage(
                     role = ChatRole.System,
-                    content = promptData["nextCommandSystemContent"].toString()
+                    content = promptResource["nextCommandSystemContent"].toString()
                 ),
                 ChatMessage(
                     role = ChatRole.Assistant,
-                    content = promptData["nextCommandAssistant"].toString()
+                    content = promptResource["nextCommandAssistant"].toString()
                 ),
                 ChatMessage(
                     role = ChatRole.User,
@@ -77,8 +77,8 @@ class OpenAiAPI (
             )
         )
         val completion: ChatCompletion = openAI.chatCompletion(chatCompletionRequest)
-        val processingData = completion.choices[0].message.content.toString().trimIndent()
+        val processedContent = completion.choices[0].message.content.toString().trimIndent()
 
-        return processingData
+        return processedContent
     }
 }
