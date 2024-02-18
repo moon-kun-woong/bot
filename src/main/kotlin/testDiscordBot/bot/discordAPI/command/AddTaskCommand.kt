@@ -18,10 +18,9 @@ class AddTaskCommand(override val taskRepository: TaskRepository,
     override suspend fun execute(parameter: MessageCreateParameter): CommandResult {
 
         val chatMessage = openAiAPI.processNlpForTask(parameter)
-        val jsonGroupData = "[" + chatMessage + "]"
 
         val mapper = ObjectMapper().registerModules()
-        val jsonNode : JsonNode  = mapper.readTree(jsonGroupData)
+        val jsonNode : JsonNode  = mapper.readTree(chatMessage)
 
         jsonNode.forEach { jsonData ->
 

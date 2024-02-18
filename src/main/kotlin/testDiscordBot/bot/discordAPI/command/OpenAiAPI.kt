@@ -45,16 +45,16 @@ class OpenAiAPI (
                 ),
                 ChatMessage(
                     role = ChatRole.User,
-                    content = event.content
+                    content = event.toString()
                 )
             )
         )
-        val completion: ChatCompletion = openAI.chatCompletion(chatCompletionRequest)
-        val jsonString = completion.choices[0].message.messageContent.toString().trimIndent()
-        val jsonContent = jsonString.substringAfter("{").substringBeforeLast("}")
-        val processedJson = "{$jsonContent}"
 
-        return processedJson
+        val completion: ChatCompletion = openAI.chatCompletion(chatCompletionRequest)
+        val aiResponse = completion.choices[0].message.messageContent.toString().trimIndent()
+        val jsonContent = aiResponse.substringAfter("TextContent(content=").substringBeforeLast(")")
+
+        return jsonContent
     }
 
     suspend fun processFindNextTask(event: Task):String{
