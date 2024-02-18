@@ -7,5 +7,6 @@ import testDiscordBot.bot.task.Task
 @Repository
 interface TaskRepository : CrudRepository<Task, Long> {
     fun findAllByUserId(userId: String): List<Task>
+    override fun deleteById(taskId: Long)
 
 }
