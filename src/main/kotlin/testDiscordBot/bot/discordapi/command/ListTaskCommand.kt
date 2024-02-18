@@ -9,6 +9,6 @@ class ListTaskCommand(override val taskRepository: TaskRepository) : MessageCrea
         val userId = parameter.username
         val tasks = taskRepository.findAllByUserId(userId = userId)
         val taskList = tasks.joinToString(", \n") { it.content }
-        return CommandResult.reply("$userId -> $taskList")
+        return CommandResult.reply("$userId -> \n $taskList")
     }
 }
