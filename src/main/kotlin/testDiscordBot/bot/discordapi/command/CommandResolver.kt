@@ -11,9 +11,9 @@ class CommandResolver(
 ) {
     fun findBeanByCommandAnnotation(): Map<String?, Command> {
 
-        val beansWithAnnotation = ac.getBeansWithAnnotation(CommandAnnotation::class.java)
+        val beansWithAnnotation = ac.getBeansWithAnnotation(TaskCommand::class.java)
         return beansWithAnnotation.values.mapNotNull { it as Command }
-            .associateBy { it::class.java.getAnnotation(CommandAnnotation::class.java)?.prefix }
+            .associateBy { it::class.java.getAnnotation(TaskCommand::class.java)?.prefix }
     }
 
     fun resolve(message: Message): Command {

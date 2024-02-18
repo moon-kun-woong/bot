@@ -10,7 +10,7 @@ import testDiscordBot.bot.task.Task
 import kotlin.time.Duration.Companion.seconds
 
 @Component
-class OpenAiAPI (
+class AiPrompt (
     @Value("\${openAi.key}") private val token: String,
     @Value("\${openAi.model}") private val model: String,
     @Value("\${openAi.organization}") private val organization: String,
