@@ -20,9 +20,6 @@ class CommandResolver(
         val writeCommand = message.content.split("\\s+".toRegex())[0]
         val commandBeans = findBeanByCommandAnnotation()
 
-        println("writeCommand ---->>$writeCommand")
-        println("commandBeans ---->>$commandBeans")
-
         return commandBeans[writeCommand] ?: throw UnsupportedCommandException(message)
     }
 }
