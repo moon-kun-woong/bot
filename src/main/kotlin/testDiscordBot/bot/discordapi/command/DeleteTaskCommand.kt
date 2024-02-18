@@ -1,6 +1,6 @@
-package testDiscordBot.bot.discordAPI.command
+package testDiscordBot.bot.discordapi.command
 
-import testDiscordBot.bot.discordRepository.TaskRepository
+import testDiscordBot.bot.repository.TaskRepository
 
 @CommandAnnotation(prefix = "!DELETE-TASK")
 class DeleteTaskCommand (override val taskRepository: TaskRepository) : MessageCreateCommand() {

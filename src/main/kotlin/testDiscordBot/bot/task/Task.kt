@@ -1,4 +1,4 @@
-package testDiscordBot.bot.discordEntity
+package testDiscordBot.bot.task
 
 import com.fasterxml.jackson.databind.JsonNode
 import jakarta.persistence.*

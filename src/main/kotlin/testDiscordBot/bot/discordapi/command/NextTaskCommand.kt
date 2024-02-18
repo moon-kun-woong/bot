@@ -1,7 +1,7 @@
-package testDiscordBot.bot.discordAPI.command
+package testDiscordBot.bot.discordapi.command
 
 import org.springframework.beans.factory.annotation.Autowired
-import testDiscordBot.bot.discordRepository.TaskRepository
+import testDiscordBot.bot.repository.TaskRepository
 
 @CommandAnnotation(prefix = "!NEXT-TASK")
 class NextTaskCommand(override val taskRepository: TaskRepository,

@@ -1,7 +1,7 @@
-package testDiscordBot.bot.discordAPI.command
+package testDiscordBot.bot.discordapi.command
 
 import dev.kord.core.event.message.MessageCreateEvent
-import testDiscordBot.bot.discordAPI.CommandAndParameterMismatchedException
+import testDiscordBot.bot.discordapi.CommandAndParameterMismatchedException
 
 
 data class MessageCreateParameter(
