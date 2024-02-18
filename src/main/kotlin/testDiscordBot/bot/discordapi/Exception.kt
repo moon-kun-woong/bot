@@ -1,8 +1,8 @@
-package testDiscordBot.bot.discordAPI
+package testDiscordBot.bot.discordapi
 
 import dev.kord.core.entity.Message
-import testDiscordBot.bot.discordAPI.command.Command
-import testDiscordBot.bot.discordAPI.command.CommandParameter
+import testDiscordBot.bot.discordapi.command.Command
+import testDiscordBot.bot.discordapi.command.CommandParameter
 
 class UnsupportedCommandException(
     message: Message

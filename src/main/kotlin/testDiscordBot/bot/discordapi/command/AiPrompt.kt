@@ -1,4 +1,4 @@
-package testDiscordBot.bot.discordAPI.command
+package testDiscordBot.bot.discordapi.command
 
 import com.aallam.openai.api.chat.*
 import com.aallam.openai.api.http.Timeout
@@ -6,11 +6,11 @@ import com.aallam.openai.api.model.ModelId
 import com.aallam.openai.client.OpenAI
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import testDiscordBot.bot.discordEntity.Task
+import testDiscordBot.bot.task.Task
 import kotlin.time.Duration.Companion.seconds
 
 @Component
-class AiPromptWriter (
+class AiPrompt (
     @Value("\${openAi.key}") private val token: String,
     @Value("\${openAi.model}") private val model: String,
     @Value("\${openAi.organization}") private val organization: String,

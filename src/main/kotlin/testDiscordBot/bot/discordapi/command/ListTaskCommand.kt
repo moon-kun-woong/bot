@@ -1,6 +1,6 @@
-package testDiscordBot.bot.discordAPI.command
+package testDiscordBot.bot.discordapi.command
 
-import testDiscordBot.bot.discordRepository.TaskRepository
+import testDiscordBot.bot.repository.TaskRepository
 
 @TaskCommand(prefix = "!LIST-TASK")
 class ListTaskCommand(override val taskRepository: TaskRepository) : MessageCreateCommand() {
