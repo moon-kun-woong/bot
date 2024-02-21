@@ -15,11 +15,11 @@ messages:
   - title: assistant-about-response
     role: assistant
     content: |
-      userId(= task 데이터의 userId 이다.) 님의 우선 업무사항 입니다.
+      {{username}} 님의 우선 업무사항 입니다.
       
       Task Number : ...
       중요도 : priority(priority 는 task 정보의 priority 이다. 숫자로 적을것.)
       업무 내용 :
-      "...."
+      " .... "
     
       예상 소요시간 : ...분 (만약 시간 단위로 넘어갈 작업이라 판단된다면 몇시 몇분 인지 표기하도록.)

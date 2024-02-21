@@ -24,77 +24,91 @@ class AiPrompt(
         timeout = Timeout(socket = 30.seconds)
     )
 
+    suspend fun processAddTask(event: MessageCreateParameter): String {
+        return process("convert-structured-task-prompt.yaml", Parameter.from(event))
+    }
+
+    suspend fun processFindNextTask(event: Task): String {
+        return process("next-task-prompt.yaml", Parameter.from(event))
+    }
+
+
     @Suppress("UNCHECKED_CAST")
-    fun resolveChatMessageFromResource(chatMessageResource: String): List<MessageItem> {
+    private fun resolveChatMessageFromResource(chatMessageResource: String): List<MessageItem> {
         val yaml = Yaml()
         val inputStream: InputStream? = this.javaClass.classLoader.getResourceAsStream(chatMessageResource)
         // !Auto casting 안됨, 추후 리팩토링 필요.
         val obj = yaml.load<Map<String, Any>>(inputStream)
         val messages = obj["messages"] as List<*>
-        return messages.map { MessageItem.from(it as Map<String, String>)}
+        return messages.map { MessageItem.from(it as Map<String, String>) }
         // ~Auto casting 안됨, 추후 리팩토링 필요.
     }
 
+    suspend fun process(file: String, parameter: Parameter): String {
+        val promptResource = resolveChatMessageFromResource(file)
+        val prompts = promptResource.map { it.toChatMessage(parameter) }
+        val chatCompletionRequest = ChatCompletionRequest(
+            model = ModelId(model),
+            messages = listOf(
+                *prompts.toTypedArray(),
+                ChatMessage(
+                    role = ChatRole.User,
+                    content = parameter.content
+                )
+            )
+        )
+        val completion: ChatCompletion = openAI.chatCompletion(chatCompletionRequest)
+        println("DEBUG: Response - ${completion.choices.joinToString(",\n")}")
+        val processedContent = completion.choices[0].message.content.toString().trimIndent()
+
+        return processedContent
+    }
+
     data class MessageItem(val title: String, val role: String, val content: String) {
-        private fun resolveContentWithEvent(event: MessageCreateParameter): String {
+        private fun resolveContentWithEvent(parameter: Parameter): String {
             return content
-                .replace("{{username}}", event.username)
-                .replace("{{serverName}}", event.serverName)
-                .replace("{{channelName}}", event.channelName)
+                .replace("{{username}}", parameter.username)
+                .replace("{{serverName}}", parameter.serverName)
+                .replace("{{channelName}}", parameter.channelName)
         }
 
-        fun toChatMessage(event: MessageCreateParameter) =
-            ChatMessage(role = Role(role), content = resolveContentWithEvent(event))
+        fun toChatMessage(parameter: Parameter) =
+            ChatMessage(role = Role(role), content = resolveContentWithEvent(parameter))
 
         companion object {
             @JvmStatic
             fun from(raw: Map<String, String>) = MessageItem(
                 title = raw.getOrDefault("title", ""),
-                role= raw.getOrDefault("role", ""),
+                role = raw.getOrDefault("role", ""),
                 content = raw.getOrDefault("content", "")
             )
         }
     }
 
-    suspend fun processAddTask(event: MessageCreateParameter): String {
-        val promptResource = resolveChatMessageFromResource("convert-structured-task-prompt.yaml")
-        val prompts = promptResource.map { it.toChatMessage(event) }
-        println("DEBUG: AddTask Prompt\n=== ${prompts.joinToString("\n=\n")}\n===")
-        val chatCompletionRequest = ChatCompletionRequest(
-            model = ModelId(model),
-            messages = listOf(
-                *prompts.toTypedArray(),
-                ChatMessage(
-                    role = ChatRole.User,
-                    content = event.toString()
+    data class Parameter(
+        val username: String,
+        val channelName: String,
+        val serverName: String,
+        val content: String,
+    ) {
+        companion object {
+            fun from(event: MessageCreateParameter): Parameter {
+                return Parameter(
+                    username = event.username,
+                    channelName = event.channelName,
+                    serverName = event.serverName,
+                    content = event.content
                 )
-            )
-        )
+            }
 
-        val completion: ChatCompletion = openAI.chatCompletion(chatCompletionRequest)
-        println("DEBUG: AddTask Response - ${completion.choices.joinToString(",\n")}")
-        val aiResponse = completion.choices[0].message.content.toString()
-
-        return aiResponse
-    }
-
-    suspend fun processFindNextTask(event: Task): String {
-        val promptResource = resolveChatMessageFromResource("next-task-prompt.yaml")
-        val prompts = promptResource.map { ChatMessage(role = Role(it.role), content = it.content) }
-        val chatCompletionRequest = ChatCompletionRequest(
-            model = ModelId(model),
-            messages = listOf(
-                *prompts.toTypedArray(),
-                ChatMessage(
-                    role = ChatRole.User,
-                    content = "$event"
+            fun from(task: Task): Parameter {
+                return Parameter(
+                    username = task.userId,
+                    channelName = task.channelName,
+                    serverName = task.serverName,
+                    content = task.content
                 )
-            )
-        )
-        val completion: ChatCompletion = openAI.chatCompletion(chatCompletionRequest)
-        println("DEBUG: AddTask Response - ${completion.choices.joinToString(",\n")}")
-        val processedContent = completion.choices[0].message.content.toString().trimIndent()
-
-        return processedContent
+            }
+        }
     }
 }
