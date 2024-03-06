@@ -7,8 +7,17 @@ class ListTaskCommand(override val taskRepository: TaskRepository) : MessageCrea
     override suspend fun execute(parameter: MessageCreateParameter): CommandResult {
 
         val userId = parameter.username
-        val tasks = taskRepository.findAllByUserId(userId = userId)
-        val taskList = tasks.joinToString(", \n") { it.content }
-        return CommandResult.reply("$userId -> \n $taskList")
+        try {
+            val tasks = taskRepository.findAllByUserId(userId = userId)
+            if (tasks.isEmpty()){
+                return CommandResult.reply("해당하는 테스크가 검색되지 않습니다.")
+            }
+            val taskList = tasks.joinToString(", \n") { it.content }
+            return CommandResult.reply("$userId -> \n $taskList")
+        }
+        catch (e:Exception){
+            return CommandResult.ignore()
+        }
+
     }
 }
