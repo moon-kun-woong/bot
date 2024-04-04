@@ -18,4 +18,9 @@ class MemberApiController(@Autowired val taskService: MemberApiService) {
     fun findMemberTask(@PathVariable username: String): List<Task> {
         return taskService.findMemberTaskService(username)
     }
+    
+    @PostMapping("/create")
+    fun createTask(@RequestBody task: Task) {
+        taskService.createTaskService(task)
+    }
 }

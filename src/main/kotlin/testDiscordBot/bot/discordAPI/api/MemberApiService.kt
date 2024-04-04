@@ -9,7 +9,12 @@ import testDiscordBot.bot.task.Task
 
 @Service
 class MemberApiService(@Autowired val repository: TaskRepository) {
+
     fun findMemberTaskService(username: String): List<Task> {
         return repository.findAllByUserId(userId = username)
+    }
+
+    fun createTaskService(task: Task) {
+        repository.save(task)
     }
 }
