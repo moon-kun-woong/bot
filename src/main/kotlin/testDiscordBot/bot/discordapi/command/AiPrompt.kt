@@ -70,6 +70,7 @@ class AiPrompt(
                 .replace("{{username}}", parameter.username)
                 .replace("{{serverName}}", parameter.serverName)
                 .replace("{{channelName}}", parameter.channelName)
+                .replace("{{priority}}", parameter.priority.toString())
         }
 
         fun toChatMessage(parameter: Parameter) =
@@ -90,6 +91,7 @@ class AiPrompt(
         val channelName: String,
         val serverName: String,
         val content: String,
+        val priority: Int
     ) {
         companion object {
             fun from(event: MessageCreateParameter): Parameter {
@@ -97,7 +99,8 @@ class AiPrompt(
                     username = event.username,
                     channelName = event.channelName,
                     serverName = event.serverName,
-                    content = event.content
+                    content = event.content,
+                    priority = event.priority
                 )
             }
 
@@ -106,7 +109,8 @@ class AiPrompt(
                     username = task.userId,
                     channelName = task.channelName,
                     serverName = task.serverName,
-                    content = task.content
+                    content = task.content,
+                    priority = task.priority
                 )
             }
         }

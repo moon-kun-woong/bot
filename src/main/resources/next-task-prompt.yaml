@@ -18,7 +18,7 @@ messages:
       {{username}} 님의 우선 업무사항 입니다.
       
       Task Number : ...
-      중요도 : priority(priority 는 task 정보의 priority 이다. 숫자로 적을것.)
+      중요도 : {{priority}} 레벨 (priority 는 task 정보의 priority 이다. 숫자로 적을것.)
       업무 내용 :
       " .... "
     

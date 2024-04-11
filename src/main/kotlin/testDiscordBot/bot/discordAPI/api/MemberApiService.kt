@@ -17,4 +17,8 @@ class MemberApiService(@Autowired val repository: TaskRepository) {
     fun createTaskService(task: Task) {
         repository.save(task)
     }
+
+    fun deleteTaskService(taskId: Long) {
+        repository.deleteById(taskId)
+    }
 }

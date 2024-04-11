@@ -9,7 +9,8 @@ data class MessageCreateParameter(
     val username: String,
     val channelName: String,
     val serverName: String,
-    val content: String
+    val content: String,
+    val priority: Int,
 ) : CommandParameter
 
 abstract class MessageCreateCommand : Command {
@@ -24,7 +25,8 @@ abstract class MessageCreateCommand : Command {
                 username = author.username,
                 channelName = channel.data.name.value!!,
                 serverName = message.getGuild().name,
-                content = message.content
+                content = message.content,
+                priority = 0
             )
         }
     }
