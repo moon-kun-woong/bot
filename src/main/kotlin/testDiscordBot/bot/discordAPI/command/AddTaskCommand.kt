@@ -3,23 +3,25 @@ package testDiscordBot.bot.discordapi.command
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
+import testDiscordBot.bot.discordapi.api.LangChainApiController
 import testDiscordBot.bot.task.Task
 import testDiscordBot.bot.repository.TaskRepository
 
 @TaskCommand(prefix = "!ADD-TASK")
 class AddTaskCommand(
     override val taskRepository: TaskRepository,
-    @Autowired private val aiPrompt: AiPrompt
+    private val langChainResponse:LangChainApiController
 ) : MessageCreateCommand() {
     override suspend fun execute(parameter: MessageCreateParameter): CommandResult {
 
-        val chatMessage = aiPrompt.processAddTask(parameter)
+        val chatMessage = langChainResponse.requestAddCommand(parameter)
 
         val mapper = ObjectMapper().registerModules()
         val jsonNode: JsonNode = mapper.readTree(chatMessage)
 
-        jsonNode.map(Task::from).forEach(taskRepository::save)
+        val tasksMapper = jsonNode.get("tasks").map(Task::from)
+        tasksMapper.forEach(taskRepository::save)
 
-        return CommandResult.reply("Task 가 추가되었습니다.")
+        return CommandResult.reply("Task 추가 : \n${tasksMapper.map { it.content }.joinToString(" ,\n ")} \n 입니다.")
     }
 }

@@ -13,7 +13,7 @@ class ListTaskCommand(override val taskRepository: TaskRepository, private val l
                 return CommandResult.reply("해당하는 태스크가 검색되지 않습니다.")
             }
             val taskList = tasks.joinToString(", \n") { it.content }
-            return CommandResult.reply("${langChainData.requestLangChain(userId)}")
+            return CommandResult.reply("${langChainData.requestListCommand(userId)}")
         } catch (e: Exception) {
             return CommandResult.ignore()
         }
