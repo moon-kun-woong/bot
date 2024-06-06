@@ -23,7 +23,8 @@ messages:
       {
         "userId": "{{username}}",
         "serverName": "{{serverName}}",
-        "channelName": "{{channelName}}"
+        "channelName": "{{channelName}}",
+        "priority": "{{priority}}"
       }
   - title: assistant-about-response
     role: assistant
